@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28902.138
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HFSExtract", "HFSExtract\HFSExtract.csproj", "{6E59CDCE-61B1-445E-8217-D37218752F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HFSExtract.CLI", "HFSExtract.CLI\HFSExtract.CLI.csproj", "{489CF727-42D1-40C3-A6F3-C53DD782A0F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E59CDCE-61B1-445E-8217-D37218752F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E59CDCE-61B1-445E-8217-D37218752F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E59CDCE-61B1-445E-8217-D37218752F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E59CDCE-61B1-445E-8217-D37218752F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{489CF727-42D1-40C3-A6F3-C53DD782A0F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{489CF727-42D1-40C3-A6F3-C53DD782A0F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{489CF727-42D1-40C3-A6F3-C53DD782A0F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{489CF727-42D1-40C3-A6F3-C53DD782A0F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2EB76A19-3ED9-4195-A3DE-FCA12592F42C}
+	EndGlobalSection
+EndGlobal
