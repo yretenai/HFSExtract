@@ -11,6 +11,8 @@ namespace HFSExtract
 
         public IEnumerable<HFSDirectory> Entries { get; set; }
 
+        public IEnumerable<HFSFile> Files => Entries.Select(x => x.File);
+
         public HFS(string path)
         {
             using (var stream = File.OpenRead(path))
@@ -29,8 +31,26 @@ namespace HFSExtract
             stream.Position = stream.Length - 0x16;
 
             using var reader = new BinaryReader(stream, Encoding.UTF8, true);
-            Index = new HFSIndex(reader);
-
+            try
+            {
+                Index = new HFSIndex(reader);
+            }
+            catch(HFSException exception)
+            {
+                if (exception.ErrorType == HFSError.HFSIndexMismatch)
+                {
+                    stream.Position = 0;
+                    Entries = new List<HFSDirectory>
+                    {
+                        new HFSDirectory(new HFSFile(reader, true))
+                    };
+                    return;
+                }
+                else
+                {
+                    throw;
+                }
+            }
             stream.Position = Index.DirectoryOffset;
             var directories = new List<HFSDirectory>(Index.DirectoryCount);
             for(var i = 0; i < Index.DirectoryCount; ++i)

@@ -27,7 +27,7 @@ namespace HFSExtract
         {
             if (reader.ReadInt32() != HFSFile.HFHeader)
             {
-                throw new InvalidDataException("Can't parse HFS Directory");
+                throw new HFSException(HFSError.HFSDirectoryMismatch);
             }
 
             Version = reader.ReadInt16();
@@ -57,6 +57,11 @@ namespace HFSExtract
             reader.BaseStream.Position = DataOffset;
             File = new HFSFile(reader);
             reader.BaseStream.Position = position;
+        }
+
+        public HFSDirectory(HFSFile file)
+        {
+            File = file;
         }
     }
 }

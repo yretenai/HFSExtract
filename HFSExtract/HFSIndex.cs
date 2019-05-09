@@ -25,7 +25,7 @@ namespace HFSExtract
         {
             if(reader.ReadInt32() != HFIndexHeader)
             {
-                throw new InvalidDataException("Can't find HFSIndex");
+                throw new HFSException(HFSError.HFSIndexMismatch);
             }
 
             IndexNumber = reader.ReadInt16();

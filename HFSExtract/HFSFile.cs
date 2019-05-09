@@ -21,31 +21,41 @@ namespace HFSExtract
         public string Extra { get; }
         public byte[] Data { get; }
 
-        public HFSFile(BinaryReader reader)
+        public HFSFile(BinaryReader reader, bool slim = false)
         {
             if (reader.ReadInt32() != HFHeader)
             {
-                throw new InvalidDataException("Can't parse HFS File");
+                throw new HFSException(HFSError.HFSFileMismatch);
             }
 
             ExtractVersion = reader.ReadInt16();
             BitFlag = reader.ReadInt16();
+            Contract.Assert(BitFlag == 0, "BitFlag == 0");
             CompressionMethod = (HFSCompressionMethod)reader.ReadInt16();
             Contract.Assert(CompressionMethod == HFSCompressionMethod.Store, "CompressionMethod == Store");
             ModFileTime = reader.ReadInt16();
             ModFileDate = reader.ReadInt16();
-            Checksum = reader.ReadInt32();
-            CompressedSize = reader.ReadInt32();
-            DecompressedSize = reader.ReadInt32();
-            var filenameLength = reader.ReadInt16();
-            var extraLength = reader.ReadInt16();
-            var position = (int)reader.BaseStream.Position;
-            Filename = HFS.XorStringWithKey(reader.ReadBytes(filenameLength), HFSXorTruths.KeyTable, position);
-            position = (int)reader.BaseStream.Position;
-            Extra = HFS.XorStringWithKey(reader.ReadBytes(extraLength), HFSXorTruths.KeyTable, position);
+            int position;
+            if (!slim)
+            {
+                Checksum = reader.ReadInt32();
+                CompressedSize = reader.ReadInt32();
+                DecompressedSize = reader.ReadInt32();
+                var filenameLength = reader.ReadInt16();
+                var extraLength = reader.ReadInt16();
+                position = (int)reader.BaseStream.Position;
+                Filename = HFS.XorStringWithKey(reader.ReadBytes(filenameLength), HFSXorTruths.KeyTable, position);
+                position = (int)reader.BaseStream.Position;
+                Extra = HFS.XorStringWithKey(reader.ReadBytes(extraLength), HFSXorTruths.KeyTable, position);
+            }
+            else
+            {
+                CompressedSize = DecompressedSize = (int)(reader.BaseStream.Length - reader.BaseStream.Position);
+                Filename = "unknown.bin";
+            }
             position = (int)reader.BaseStream.Position;
             Data = HFS.XorBlockWithKey(reader.ReadBytes(CompressedSize), HFSXorTruths.KeyTable, position);
-            if(Filename.EndsWith(".comp"))
+            if (Filename.EndsWith(".comp"))
             {
                 using (var ms = new MemoryStream(Data))
                 using (var msReader = new BinaryReader(ms))
