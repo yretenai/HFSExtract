@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace HFSExtract.CLI
 {
@@ -9,14 +10,17 @@ namespace HFSExtract.CLI
         {
             if(args.Length < 2)
             {
-                Console.Error.WriteLine($"Usage: HFSExtract.CLI.exe hfs_directory extract_directory");
+                Console.Error.WriteLine($"Usage: HFSExtract.CLI.exe hfs_directory extract_directory [summary.txt]");
                 return 1;
             }
+
+            HFSDirectoryMangler.LoadPaths(args.ElementAtOrDefault(2));
 
             foreach (var file in Directory.GetFiles(args[0], "*.hfs", SearchOption.TopDirectoryOnly))
             {
                 var hfs = new HFS(file);
-                var dest = Path.Combine(args[1], Path.GetFileNameWithoutExtension(file));
+                var path = HFSDirectoryMangler.GetPath(Path.GetFileNameWithoutExtension(file));
+                var dest = Path.Combine(args[1], path);
                 if (!Directory.Exists(dest))
                 {
                     Directory.CreateDirectory(dest);
