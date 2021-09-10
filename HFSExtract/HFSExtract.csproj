@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>preview</LangVersion>
+        <NeutralLanguage>en-001</NeutralLanguage>
+        <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+    </PropertyGroup>
+    
+</Project>
