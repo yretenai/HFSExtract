@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace HFSExtract {
@@ -48,6 +49,10 @@ namespace HFSExtract {
             var marshal = new CursoredMemoryMarshal(buffer.ToArray());
             for (var i = 0; i < Header.Count; ++i) {
                 var resourceNameLength = marshal.Read<int>();
+                if (resourceNameLength is < 0 or > 127) {
+                    throw new CryptographicException();
+                }
+                
                 var resourceName = Encoding.Unicode.GetString(marshal.Copy(resourceNameLength * 2).Span);
                 var file = marshal.Read<HFSFile>();
                 var hash = marshal.Copy(16).ToArray();

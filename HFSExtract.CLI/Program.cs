@@ -14,16 +14,21 @@ namespace HFSExtract.CLI {
             var output = args[1];
             
             foreach (var file in Directory.GetFiles(args[0], "*.hfs", SearchOption.TopDirectoryOnly)) {
-                using var hfs = new HFSArchive(File.OpenRead(file), Path.GetFileName(file));
-                foreach (var filename in hfs.Files.Keys) {
-                    var target = Path.Combine(output, filename);
-                    var dir = Path.GetDirectoryName(target) ?? output;
-                    if (!Directory.Exists(dir)) {
-                        Directory.CreateDirectory(dir);
+                Console.WriteLine(Path.GetFileName(file));
+                try {
+                    using var hfs = new HFSArchive(File.OpenRead(file), Path.GetFileName(file));
+                    foreach (var filename in hfs.Files.Keys) {
+                        var target = Path.Combine(output, filename);
+                        var dir = Path.GetDirectoryName(target) ?? output;
+                        if (!Directory.Exists(dir)) {
+                            Directory.CreateDirectory(dir);
+                        }
+
+                        Console.WriteLine(filename);
+                        File.WriteAllBytes(target, hfs.ReadFile(filename).ToArray());
                     }
-                    
-                    Console.WriteLine(filename);
-                    File.WriteAllBytes(target, hfs.ReadFile(filename).ToArray());
+                } catch (Exception e) {
+                    Console.Error.WriteLine(e.Message);
                 }
             }
 
